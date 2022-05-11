@@ -6,11 +6,16 @@ import Lists from "./components/Lists";
 import "bootstrap/dist/css/bootstrap.min.css";
 const App = () => {
   const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
-
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")));
+  if (JSON.parse(localStorage.getItem("todos")) === null) {
+    localStorage.setItem("todos", "[]");
+  }
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos"));
-    if (storedTodos) setTodos(storedTodos);
+
+    if (storedTodos !== []) {
+      setTodos(storedTodos);
+    }
   }, []);
 
   // menyimpan todo di localStorage
@@ -33,7 +38,7 @@ const App = () => {
   };
 
   const doneHandler = (todoId) => {
-    const index = todos.findIndex((emp) => emp.id === todoId);
+    const index = todos.findIndex((todo) => todo.id === todoId);
     const newTodo = [...todos];
 
     newTodo[index] = {
